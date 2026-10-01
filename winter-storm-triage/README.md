@@ -2,7 +2,7 @@
 
 > An intelligent, autonomous customer support agent built with the **Google Agent Development Kit (ADK)** and **Model Context Protocol (MCP)**, powered by **Gemini 3.8 Flash** and deployed on **Google Cloud Vertex AI Agent Runtime**.
 
-![Winter Storm Triage Demo](./demo.svg)
+![Winter Storm Triage Demo](./demo.gif)
 
 ---
 

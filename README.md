@@ -2,7 +2,7 @@
 
 > Complete implementation, evaluation, and production deployment of the **Winter Storm Triage Agent** using **Google Agent Development Kit (ADK)**, **FastMCP**, and **Vertex AI Agent Runtime**.
 
-![Winter Storm Triage Demo](./demo.svg)
+![Winter Storm Triage Demo](./demo.gif)
 
 ---
 
