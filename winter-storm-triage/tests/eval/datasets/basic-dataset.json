@@ -1,0 +1,18 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "winter_storm_triage_gold",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "What is the status of order CYM-EC-9921?"}]
+      }
+    },
+    {
+      "eval_case_id": "winter_storm_triage_platinum",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Can you check the delivery status for my order CYM-EC-1002?"}]
+      }
+    }
+  ]
+}

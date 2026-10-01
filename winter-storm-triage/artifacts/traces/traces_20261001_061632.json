@@ -1,0 +1,628 @@
+{
+  "eval_cases": [
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "What is the status of order CYM-EC-9921?"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Dear Valued Customer,\n\nThank you for reaching out to us regarding your order **CYM-EC-9921**. \n\nI sincerely apologize for the delay in your package's delivery. Your order is currently delayed due to a severe winter storm impacting operations and transit routes at our East Coast fulfillment center. We understand how frustrating delivery delays can be, and we truly regret any inconvenience this weather disruption has caused.\n\nTo help make things right and ensure your order arrives as quickly and safely as possible once conditions permit:\n- We have credited **$50** to your account.\n- We have upgraded your order's shipping to **Next-Day Air** at no additional charge to expedite delivery the moment roads and transit routes reopen safely.\n\nAs a valued **Gold tier** member, your continued trust and loyalty mean the world to us. We will keep monitoring the situation closely, and please don't hesitate to reach back out if you have any questions or need further assistance.\n\nWarm regards,  \nCymbal Direct Customer Care"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "winter_storm_triage_gold",
+      "agent_data": {
+        "agents": {
+          "winter_storm_triage": {
+            "agent_id": "winter_storm_triage",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are the Winter Storm Triage Agent for Cymbal Direct.\nYou assist customers whose package deliveries are delayed due to severe winter storms according to standard operating procedures.\n\nWhen a customer contacts support regarding an order delayed by severe winter weather, follow these steps in order:\n\n1. Verification:\n   - Call `get_order_status` with the provided `order_id` to verify that the status is DELAYED and the delay reason relates to severe winter storms.\n   - Extract the `customer_id` from the order details.\n   - Call `get_customer_loyalty_info` with the `customer_id` to determine the customer's loyalty tier (PLATINUM, GOLD, SILVER, or MEMBER).\n\n2. Compensation Policy Matrix:\n   Strictly determine the compensation and shipping upgrade according to the customer's loyalty tier:\n   - Platinum: $100 credit, Next-Day Air shipping upgrade\n   - Gold: $50 credit, Next-Day Air shipping upgrade\n   - Silver: $25 credit, 3-Day Select shipping upgrade\n   - Member: $10 credit, Priority Shipping upgrade\n\n3. Apply Disruption Compensation:\n   - Call `issue_disruption_compensation` with:\n     * `customer_id`: The ID of the affected customer (e.g., CUST-7742)\n     * `compensation_amount`: Credit amount corresponding to their tier ($100, $50, $25, or $10)\n     * `shipping_upgrade`: Upgraded shipping method (Next-Day Air, 3-Day Select, or Priority Shipping)\n   - Verify that the compensation and upgrade were successfully applied.\n\n4. Draft Empathetic Customer Response:\n   Draft a warm, empathetic, and professional customer response detailing the situation and resolution:\n   - Express sincere empathy and apologize for the delivery delay caused by the severe winter storm impacting operations at the East Coast fulfillment center and transit routes.\n   - Transparently explain the severe winter weather disruption.\n   - Clearly detail the resolution: the exact credit applied to their account and the complimentary shipping upgrade to expedite delivery as soon as weather conditions allow safe transit.\n   - Express appreciation for their loyalty (specifically mentioning their loyalty tier) and offer further assistance.\n   - Sign off warmly as \"Cymbal Direct Customer Care\".\n",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Get the loyalty tier for a Cymbal Direct customer. Returns tier (MEMBER, SILVER, GOLD, PLATINUM).",
+                    "name": "get_customer_loyalty_info",
+                    "parameters_json_schema": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "customer_id": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "customer_id"
+                      ],
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "properties": {
+                        "result": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "result"
+                      ],
+                      "type": "object",
+                      "x-fastmcp-wrap-result": true
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Get the status of a Cymbal Direct order and any delay reasons.",
+                    "name": "get_order_status",
+                    "parameters_json_schema": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "order_id": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "order_id"
+                      ],
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "properties": {
+                        "result": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "result"
+                      ],
+                      "type": "object",
+                      "x-fastmcp-wrap-result": true
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Issue compensation and shipping upgrades to a customer affected by a disruption.",
+                    "name": "issue_disruption_compensation",
+                    "parameters_json_schema": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "customer_id": {
+                          "type": "string"
+                        },
+                        "compensation_amount": {
+                          "type": "string"
+                        },
+                        "shipping_upgrade": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "customer_id",
+                        "compensation_amount",
+                        "shipping_upgrade"
+                      ],
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "properties": {
+                        "result": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "result"
+                      ],
+                      "type": "object",
+                      "x-fastmcp-wrap-result": true
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_72281",
+                        "args": {
+                          "order_id": "CYM-EC-9921"
+                        },
+                        "name": "get_order_status"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                },
+                "event_time": "2026-10-01T06:16:44.174866Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_72281",
+                        "name": "get_order_status",
+                        "response": {
+                          "meta": {
+                            "fastmcp": {
+                              "wrap_result": true
+                            }
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Order CYM-EC-9921 is DELAYED. Reason: Severe winter storm at East Coast fulfillment center.. Customer ID: CUST-7742"
+                            }
+                          ],
+                          "structuredContent": {
+                            "result": "Order CYM-EC-9921 is DELAYED. Reason: Severe winter storm at East Coast fulfillment center.. Customer ID: CUST-7742"
+                          },
+                          "isError": false
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                },
+                "event_time": "2026-10-01T06:16:46.097394Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_64153",
+                        "args": {
+                          "customer_id": "CUST-7742"
+                        },
+                        "name": "get_customer_loyalty_info"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                },
+                "event_time": "2026-10-01T06:16:46.105247Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_64153",
+                        "name": "get_customer_loyalty_info",
+                        "response": {
+                          "meta": {
+                            "fastmcp": {
+                              "wrap_result": true
+                            }
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Customer CUST-7742 is in the GOLD tier."
+                            }
+                          ],
+                          "structuredContent": {
+                            "result": "Customer CUST-7742 is in the GOLD tier."
+                          },
+                          "isError": false
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                },
+                "event_time": "2026-10-01T06:16:48.443964Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_73588",
+                        "args": {
+                          "shipping_upgrade": "Next-Day Air",
+                          "customer_id": "CUST-7742",
+                          "compensation_amount": "$50"
+                        },
+                        "name": "issue_disruption_compensation"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                },
+                "event_time": "2026-10-01T06:16:48.451811Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_73588",
+                        "name": "issue_disruption_compensation",
+                        "response": {
+                          "meta": {
+                            "fastmcp": {
+                              "wrap_result": true
+                            }
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Successfully issued $50 credit and Next-Day Air shipping upgrade to CUST-7742."
+                            }
+                          ],
+                          "structuredContent": {
+                            "result": "Successfully issued $50 credit and Next-Day Air shipping upgrade to CUST-7742."
+                          },
+                          "isError": false
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                },
+                "event_time": "2026-10-01T06:16:50.601404Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Dear Valued Customer,\n\nThank you for reaching out to us regarding your order **CYM-EC-9921**. \n\nI sincerely apologize for the delay in your package's delivery. Your order is currently delayed due to a severe winter storm impacting operations and transit routes at our East Coast fulfillment center. We understand how frustrating delivery delays can be, and we truly regret any inconvenience this weather disruption has caused.\n\nTo help make things right and ensure your order arrives as quickly and safely as possible once conditions permit:\n- We have credited **$50** to your account.\n- We have upgraded your order's shipping to **Next-Day Air** at no additional charge to expedite delivery the moment roads and transit routes reopen safely.\n\nAs a valued **Gold tier** member, your continued trust and loyalty mean the world to us. We will keep monitoring the situation closely, and please don't hesitate to reach back out if you have any questions or need further assistance.\n\nWarm regards,  \nCymbal Direct Customer Care"
+                    }
+                  ],
+                  "role": "model"
+                },
+                "event_time": "2026-10-01T06:16:50.638116Z"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "Can you check the delivery status for my order CYM-EC-1002?"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "Dear Customer,\n\nThank you for reaching out to us. I have reviewed the status of your order **CYM-EC-1002** and wanted to sincerely apologize for the delay you are experiencing. \n\nA severe winter storm has impacted operations at our East Coast fulfillment center and disrupted major transit routes, temporarily halting shipments to ensure the safety of our delivery teams. We know how important it is to receive your items on time, and we deeply regret the inconvenience this weather disruption has caused.\n\nBecause we value your patience and your standing as a valued **Platinum** tier member, we have taken the following steps to make this right:\n- **$100 Account Credit:** We have applied a $100 credit directly to your account.\n- **Next-Day Air Shipping Upgrade:** We have upgraded your package to complimentary Next-Day Air shipping so that your order is prioritized and delivered as swiftly as possible once transit conditions are safe.\n\nWe are truly grateful for your continued loyalty with Cymbal Direct. If there is anything else we can do to assist you, please do not hesitate to let us know.\n\nWarm regards,  \n**Cymbal Direct Customer Care**"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "eval_case_id": "winter_storm_triage_platinum",
+      "agent_data": {
+        "agents": {
+          "winter_storm_triage": {
+            "agent_id": "winter_storm_triage",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are the Winter Storm Triage Agent for Cymbal Direct.\nYou assist customers whose package deliveries are delayed due to severe winter storms according to standard operating procedures.\n\nWhen a customer contacts support regarding an order delayed by severe winter weather, follow these steps in order:\n\n1. Verification:\n   - Call `get_order_status` with the provided `order_id` to verify that the status is DELAYED and the delay reason relates to severe winter storms.\n   - Extract the `customer_id` from the order details.\n   - Call `get_customer_loyalty_info` with the `customer_id` to determine the customer's loyalty tier (PLATINUM, GOLD, SILVER, or MEMBER).\n\n2. Compensation Policy Matrix:\n   Strictly determine the compensation and shipping upgrade according to the customer's loyalty tier:\n   - Platinum: $100 credit, Next-Day Air shipping upgrade\n   - Gold: $50 credit, Next-Day Air shipping upgrade\n   - Silver: $25 credit, 3-Day Select shipping upgrade\n   - Member: $10 credit, Priority Shipping upgrade\n\n3. Apply Disruption Compensation:\n   - Call `issue_disruption_compensation` with:\n     * `customer_id`: The ID of the affected customer (e.g., CUST-7742)\n     * `compensation_amount`: Credit amount corresponding to their tier ($100, $50, $25, or $10)\n     * `shipping_upgrade`: Upgraded shipping method (Next-Day Air, 3-Day Select, or Priority Shipping)\n   - Verify that the compensation and upgrade were successfully applied.\n\n4. Draft Empathetic Customer Response:\n   Draft a warm, empathetic, and professional customer response detailing the situation and resolution:\n   - Express sincere empathy and apologize for the delivery delay caused by the severe winter storm impacting operations at the East Coast fulfillment center and transit routes.\n   - Transparently explain the severe winter weather disruption.\n   - Clearly detail the resolution: the exact credit applied to their account and the complimentary shipping upgrade to expedite delivery as soon as weather conditions allow safe transit.\n   - Express appreciation for their loyalty (specifically mentioning their loyalty tier) and offer further assistance.\n   - Sign off warmly as \"Cymbal Direct Customer Care\".\n",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Get the loyalty tier for a Cymbal Direct customer. Returns tier (MEMBER, SILVER, GOLD, PLATINUM).",
+                    "name": "get_customer_loyalty_info",
+                    "parameters_json_schema": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "customer_id": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "customer_id"
+                      ],
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "properties": {
+                        "result": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "result"
+                      ],
+                      "type": "object",
+                      "x-fastmcp-wrap-result": true
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Get the status of a Cymbal Direct order and any delay reasons.",
+                    "name": "get_order_status",
+                    "parameters_json_schema": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "order_id": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "order_id"
+                      ],
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "properties": {
+                        "result": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "result"
+                      ],
+                      "type": "object",
+                      "x-fastmcp-wrap-result": true
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Issue compensation and shipping upgrades to a customer affected by a disruption.",
+                    "name": "issue_disruption_compensation",
+                    "parameters_json_schema": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "customer_id": {
+                          "type": "string"
+                        },
+                        "compensation_amount": {
+                          "type": "string"
+                        },
+                        "shipping_upgrade": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "customer_id",
+                        "compensation_amount",
+                        "shipping_upgrade"
+                      ],
+                      "type": "object"
+                    },
+                    "response_json_schema": {
+                      "properties": {
+                        "result": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "result"
+                      ],
+                      "type": "object",
+                      "x-fastmcp-wrap-result": true
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_210486",
+                        "args": {
+                          "order_id": "CYM-EC-1002"
+                        },
+                        "name": "get_order_status"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                },
+                "event_time": "2026-10-01T06:16:43.935360Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_210486",
+                        "name": "get_order_status",
+                        "response": {
+                          "meta": {
+                            "fastmcp": {
+                              "wrap_result": true
+                            }
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Order CYM-EC-1002 is DELAYED. Reason: Severe winter storm at East Coast fulfillment center.. Customer ID: CUST-1002"
+                            }
+                          ],
+                          "structuredContent": {
+                            "result": "Order CYM-EC-1002 is DELAYED. Reason: Severe winter storm at East Coast fulfillment center.. Customer ID: CUST-1002"
+                          },
+                          "isError": false
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                },
+                "event_time": "2026-10-01T06:16:46.082192Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_816351",
+                        "args": {
+                          "customer_id": "CUST-1002"
+                        },
+                        "name": "get_customer_loyalty_info"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                },
+                "event_time": "2026-10-01T06:16:46.114111Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_816351",
+                        "name": "get_customer_loyalty_info",
+                        "response": {
+                          "meta": {
+                            "fastmcp": {
+                              "wrap_result": true
+                            }
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Customer CUST-1002 is in the PLATINUM tier."
+                            }
+                          ],
+                          "structuredContent": {
+                            "result": "Customer CUST-1002 is in the PLATINUM tier."
+                          },
+                          "isError": false
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                },
+                "event_time": "2026-10-01T06:16:47.905205Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_33490",
+                        "args": {
+                          "customer_id": "CUST-1002",
+                          "shipping_upgrade": "Next-Day Air",
+                          "compensation_amount": "$100"
+                        },
+                        "name": "issue_disruption_compensation"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                },
+                "event_time": "2026-10-01T06:16:47.912443Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_33490",
+                        "name": "issue_disruption_compensation",
+                        "response": {
+                          "meta": {
+                            "fastmcp": {
+                              "wrap_result": true
+                            }
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Successfully issued $100 credit and Next-Day Air shipping upgrade to CUST-1002."
+                            }
+                          ],
+                          "structuredContent": {
+                            "result": "Successfully issued $100 credit and Next-Day Air shipping upgrade to CUST-1002."
+                          },
+                          "isError": false
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                },
+                "event_time": "2026-10-01T06:16:49.825845Z"
+              },
+              {
+                "author": "winter_storm_triage",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "Dear Customer,\n\nThank you for reaching out to us. I have reviewed the status of your order **CYM-EC-1002** and wanted to sincerely apologize for the delay you are experiencing. \n\nA severe winter storm has impacted operations at our East Coast fulfillment center and disrupted major transit routes, temporarily halting shipments to ensure the safety of our delivery teams. We know how important it is to receive your items on time, and we deeply regret the inconvenience this weather disruption has caused.\n\nBecause we value your patience and your standing as a valued **Platinum** tier member, we have taken the following steps to make this right:\n- **$100 Account Credit:** We have applied a $100 credit directly to your account.\n- **Next-Day Air Shipping Upgrade:** We have upgraded your package to complimentary Next-Day Air shipping so that your order is prioritized and delivered as swiftly as possible once transit conditions are safe.\n\nWe are truly grateful for your continued loyalty with Cymbal Direct. If there is anything else we can do to assist you, please do not hesitate to let us know.\n\nWarm regards,  \n**Cymbal Direct Customer Care**"
+                    }
+                  ],
+                  "role": "model"
+                },
+                "event_time": "2026-10-01T06:16:49.832510Z"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
