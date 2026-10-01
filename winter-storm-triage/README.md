@@ -21,22 +21,20 @@ The **Winter Storm Triage Agent** is designed for **Cymbal Direct** customer ope
 
 ```mermaid
 flowchart TD
-    User["Customer / Client"] -->|Query / A2A / HTTP| Gateway["Vertex AI Agent Runtime"]
-    Gateway --> AgentApp["ADK Agent (Gemini 3.8 Flash)"]
+    A["Customer Inquiry"] --> B["Vertex AI Agent Runtime (us-west1)"]
+    B --> C["Winter Storm Triage Agent (Gemini 3.8 Flash)"]
+    C --> D["ADK McpToolset"]
+    D --> E["FastMCP Logistics Server (cymbal_direct_mcp.py)"]
     
-    subgraph AgentApp ["Winter Storm Triage Agent"]
-        Prompt["System Instructions & SOP"]
-        LLM["gemini-3.8-flash"]
-        MCPTool["McpToolset (FastMCP)"]
-    end
-    
-    MCPTool -->|stdio| MCPServer["Cymbal Logistics MCP Server (cymbal_direct_mcp.py)"]
-    
-    subgraph MCPServer ["FastMCP Logistics Server"]
+    subgraph Tools ["FastMCP Available Tools"]
         T1["get_order_status"]
         T2["get_customer_loyalty_info"]
         T3["issue_disruption_compensation"]
     end
+    
+    E --> Tools
+    Tools --> C
+    C --> F["Resolution and Empathetic Response"]
 ```
 
 ---

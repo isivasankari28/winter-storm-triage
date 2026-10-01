@@ -20,18 +20,20 @@ This repository contains the end-to-end solution for the GenAI Challenge:
 
 ```mermaid
 flowchart TD
-    User["Customer / Client"] -->|ADK Remote Query / A2A| AgentRuntime["Vertex AI Agent Runtime (us-west1)"]
-    AgentRuntime --> Agent["Winter Storm Triage Agent (Gemini 3.8 Flash)"]
+    A["Customer Inquiry"] --> B["Vertex AI Agent Runtime (us-west1)"]
+    B --> C["Winter Storm Triage Agent (Gemini 3.8 Flash)"]
+    C --> D["ADK McpToolset"]
+    D --> E["FastMCP Logistics Server (cymbal_direct_mcp.py)"]
     
-    subgraph AgentRuntime ["Vertex AI Agent Runtime"]
-        Agent -->|ADK McpToolset (stdio)| FastMCP["FastMCP Logistics Server (cymbal_direct_mcp.py)"]
-        
-        subgraph FastMCP ["Logistics Tools"]
-            O["get_order_status"]
-            L["get_customer_loyalty_info"]
-            C["issue_disruption_compensation"]
-        end
+    subgraph Tools ["FastMCP Available Tools"]
+        T1["get_order_status"]
+        T2["get_customer_loyalty_info"]
+        T3["issue_disruption_compensation"]
     end
+    
+    E --> Tools
+    Tools --> C
+    C --> F["Resolution and Empathetic Response"]
 ```
 
 ---
